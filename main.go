@@ -1,13 +1,13 @@
 package main
 
 import (
-	"bytes"
-	"errors"
 	"fmt"
 	"go/build"
 	"os"
 	"path"
 	"strings"
+
+	"golang.org/x/mod/modfile"
 )
 
 func pkgImports(module, root, dir string) ([]string, error) {
@@ -75,13 +75,7 @@ func importMap(root string) (map[string][]string, error) {
 		return nil, err
 	}
 
-	space := bytes.IndexRune(mod, ' ')
-	newline := bytes.IndexRune(mod, '\n')
-	if space == -1 || newline == -1 {
-		return nil, errors.New("go.mod file doesn't start with 'module <import path>'")
-	}
-
-	return scanDir(string(mod[space+1:newline])+"/", root, "")
+	return scanDir(modfile.ModulePath(mod)+"/", root, "")
 }
 
 func outputGraphviz(imports map[string][]string) {
