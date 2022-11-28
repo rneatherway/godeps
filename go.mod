@@ -1,4 +1,4 @@
-module github.com/rneatherway/deps
+module github.com/rneatherway/godeps
 
 go 1.18
 
