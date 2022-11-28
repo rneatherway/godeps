@@ -5,6 +5,7 @@ import (
 	"go/build"
 	"os"
 	"path"
+	"sort"
 	"strings"
 
 	"golang.org/x/mod/modfile"
@@ -80,7 +81,17 @@ func importMap(root string) (map[string][]string, error) {
 
 func outputGraphviz(imports map[string][]string) {
 	fmt.Println("digraph G {")
-	for pkg, deps := range imports {
+
+	pkgs := make([]string, 0, len(imports))
+	for pkg := range imports {
+		pkgs = append(pkgs, pkg)
+	}
+	sort.Strings(pkgs)
+
+	for _, pkg := range pkgs {
+		deps := imports[pkg]
+		sort.Strings(deps)
+
 		for _, dep := range deps {
 			fmt.Printf("\t%q -> %q\n", pkg, dep)
 		}
