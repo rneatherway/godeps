@@ -82,7 +82,7 @@ func outputGraphviz(imports map[string][]string) {
 	fmt.Println("digraph G {")
 	for pkg, deps := range imports {
 		for _, dep := range deps {
-			fmt.Printf("\t\"%s\" -> \"%s\"\n", pkg, dep)
+			fmt.Printf("\t%q -> %q\n", pkg, dep)
 		}
 	}
 	fmt.Println("}")
